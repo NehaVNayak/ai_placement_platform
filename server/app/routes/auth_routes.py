@@ -1,19 +1,17 @@
 from fastapi import APIRouter, HTTPException
 from app.config.database import db
-from app.schemas.user_schema import TPOSignup
-from app.utils.security import hash_password
-from app.utils.security import verify_password
+from app.schemas.user_schema import TPOSignup, LoginSchema
+from app.utils.security import hash_password, verify_password
 from app.utils.jwt_handler import create_access_token
-from app.schemas.user_schema import LoginSchema
-
 
 router = APIRouter()
+
 
 @router.post("/tpo/signup")
 def tpo_signup(user: TPOSignup):
 
-    # Check if user exists
-    existing_user = db.users.find_one({"email": user.email})
+    existing_user = db["users"].find_one({"email": user.email})
+
     if existing_user:
         raise HTTPException(status_code=400, detail="Email already registered")
 
@@ -31,29 +29,47 @@ def tpo_signup(user: TPOSignup):
         }
     }
 
-    db.users.insert_one(new_user)
+    db["users"].insert_one(new_user)
 
     return {"message": "TPO registered successfully"}
-
 
 @router.post("/login")
 def login(user: LoginSchema):
 
-    existing_user = db.users.find_one({"email": user.email})
+    existing_user = db["users"].find_one({"email": user.email})
+
+    if not existing_user:
+        existing_user = db["students"].find_one({"email": user.email})
+
+    if not existing_user:
+        existing_user = db["faculty"].find_one({"email": user.email})
 
     if not existing_user:
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
-    if not verify_password(user.password, existing_user["password"]):
-        raise HTTPException(status_code=400, detail="Invalid credentials")
+    # TPO password verification (hashed)
+    if existing_user.get("role") == "TPO":
+        if not verify_password(user.password, existing_user["password"]):
+            raise HTTPException(status_code=400, detail="Invalid credentials")
+
+    # Student or Faculty password verification (plain)
+    else:
+        if user.password != existing_user["password"]:
+            raise HTTPException(status_code=400, detail="Invalid credentials")
+
+    role = existing_user.get("role", "STUDENT")
+
+    # If faculty record doesn't have role field
+    if "department" in existing_user:
+        role = "FACULTY"
 
     token = create_access_token({
         "email": existing_user["email"],
-        "role": existing_user["role"]
+        "role": role
     })
 
     return {
         "access_token": token,
         "token_type": "bearer",
-        "role": existing_user["role"]
+        "role": role
     }

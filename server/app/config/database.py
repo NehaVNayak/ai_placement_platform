@@ -5,3 +5,6 @@ MONGO_URL = "mongodb://localhost:27017"
 client = MongoClient(MONGO_URL)
 
 db = client["ai_placement_db"]
+
+students_collection = db["students"]
+faculty_collection = db["faculty"]
