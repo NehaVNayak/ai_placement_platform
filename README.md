@@ -14,7 +14,7 @@ A web platform designed to help students prepare for placements by managing thei
 
 * **Frontend:** React.js
 * **Backend:** FastAPI
-* **Database:** MySQL / PostgreSQL
+* **Database:**  Mongo 
 * **Other Tools:** Axios, React Router
 
 ## Run the Project
