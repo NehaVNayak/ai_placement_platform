@@ -31,6 +31,4 @@ Run backend (FastAPI):
 
 uvicorn app.main:app --reload
 
-## Author
 
-Neha Nayak
