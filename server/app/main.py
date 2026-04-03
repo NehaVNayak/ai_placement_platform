@@ -4,7 +4,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routes.auth_routes import router as auth_router
 from app.routes.dashboard_routes import router as dashboard_router
 from app.routes.student_routes import router as student_router
-from app.routes.faculty import router as faculty_router   
+from app.routes.faculty import router as faculty_router  
+from app.routes.practice import router as practice_router 
+from app.routes.coding_routes import router as coding_router
+from app.routes.programming import router as programming_router
+
 
 app = FastAPI()
 
@@ -23,6 +27,9 @@ app.include_router(auth_router, prefix="/api")
 app.include_router(dashboard_router, prefix="/api")
 app.include_router(student_router, prefix="/api/student")
 app.include_router(faculty_router, prefix="/api/faculty")   # NEW
+app.include_router(practice_router, prefix="/api/practice")
+app.include_router(coding_router, prefix="/api")
+app.include_router(programming_router, prefix="/api/practice")
 
 @app.get("/")
 def root():

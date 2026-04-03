@@ -24,11 +24,18 @@ function Login() {
     e.preventDefault();
 
     try {
+
       const res = await loginUser(formData);
 
       // store token and role
       localStorage.setItem("token", res.access_token);
       localStorage.setItem("role", res.role);
+
+      // store student info
+      if (res.role === "STUDENT") {
+        localStorage.setItem("studentId", res.student_id);
+        localStorage.setItem("name", res.name);   // ⭐ added this line
+      }
 
       setMessage("Login successful!");
 

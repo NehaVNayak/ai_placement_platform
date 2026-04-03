@@ -3,6 +3,7 @@ from app.config.database import db
 from app.schemas.user_schema import TPOSignup, LoginSchema
 from app.utils.security import hash_password, verify_password
 from app.utils.jwt_handler import create_access_token
+from bson import ObjectId
 
 router = APIRouter()
 
@@ -47,19 +48,18 @@ def login(user: LoginSchema):
     if not existing_user:
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
-    # TPO password verification (hashed)
+    # TPO password verification
     if existing_user.get("role") == "TPO":
         if not verify_password(user.password, existing_user["password"]):
             raise HTTPException(status_code=400, detail="Invalid credentials")
 
-    # Student or Faculty password verification (plain)
+    # Student / Faculty password check
     else:
         if user.password != existing_user["password"]:
             raise HTTPException(status_code=400, detail="Invalid credentials")
 
     role = existing_user.get("role", "STUDENT")
 
-    # If faculty record doesn't have role field
     if "department" in existing_user:
         role = "FACULTY"
 
@@ -71,5 +71,7 @@ def login(user: LoginSchema):
     return {
         "access_token": token,
         "token_type": "bearer",
-        "role": role
+        "role": role,
+        "student_id": str(existing_user["_id"]),   # ⭐ added
+        "name": existing_user.get("full_name") or existing_user.get("profile", {}).get("full_name")  # ⭐ added
     }
