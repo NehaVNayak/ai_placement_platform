@@ -15,6 +15,11 @@ import ProgrammingPractice from "./pages/ProgrammingPractice";
 import CodingPage from "./pages/CodingPage";
 import CodingSubjects from "./pages/CodingSubjects";
 import CodingQuestions from "./pages/CodingQuestions";
+import AptitudeDashboard from "./pages/AptitudeDashboard";
+import AptitudeTopics from "./pages/AptitudeTopics";
+import AptitudePractice from "./pages/AptitudePractice";
+import PerformanceDashboard from "./pages/PerformanceDashboard";
+import WeakTopicsCard from "./pages/WeakTopicsCard";
 
 function TPODashboard() {
   return <h2>TPO Dashboard</h2>;
@@ -136,6 +141,50 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/aptitude"
+          element={
+            <ProtectedRoute allowedRole="STUDENT">
+              <AptitudeDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+      <Route
+        path="/aptitude-topics/:section"
+        element={
+          <ProtectedRoute allowedRole="STUDENT">
+            <AptitudeTopics />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/aptitude-practice/:section/:topic"
+        element={
+          <ProtectedRoute allowedRole="STUDENT">
+            <AptitudePractice />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/performance"
+        element={
+          <ProtectedRoute allowedRole="STUDENT">
+            <PerformanceDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/weak-topics"
+        element={
+          <ProtectedRoute allowedRole="STUDENT">
+            <WeakTopicsCard />
+          </ProtectedRoute>
+        }
+      />
 
       </Routes>
     </Router>

@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getNextQuestion, submitAnswer } from "../api/practiceApi";
+import axios from "axios";
 
-function TechnicalPractice() {
-  const { subject } = useParams();
+function AptitudePractice() {
+  const { section, topic } = useParams();
 
   const [question, setQuestion] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -17,15 +17,17 @@ function TechnicalPractice() {
     if (studentId) {
       loadQuestion();
     }
-  }, [studentId, subject]);
+  }, [studentId, section, topic]);
 
   const loadQuestion = async () => {
     try {
       setLoading(true);
 
-      const q = await getNextQuestion(studentId, subject);
+      const res = await axios.get(
+        `http://localhost:8000/api/aptitude/next-question?student_id=${studentId}&section=${section}&topic=${topic}`
+      );
 
-      setQuestion(q);
+      setQuestion(res.data);
       setSelected(null);
       setResult(null);
 
@@ -42,13 +44,16 @@ function TechnicalPractice() {
     setSelected(option);
 
     try {
-      const res = await submitAnswer({
-        student_id: studentId,
-        question_id: question._id,
-        selected_option: option
-      });
+      const res = await axios.post(
+        "http://localhost:8000/api/aptitude/submit-answer",
+        {
+          student_id: studentId,
+          question_id: question._id,
+          selected_option: option
+        }
+      );
 
-      setResult(res.correct);
+      setResult(res.data.correct);
 
     } catch (error) {
       console.error("Error submitting answer:", error);
@@ -61,7 +66,7 @@ function TechnicalPractice() {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.heading}>{subject} Practice</h2>
+      <h2 style={styles.heading}>{topic} Practice</h2>
 
       <div style={styles.card}>
         <h3 style={styles.question}>{question.question_text}</h3>
@@ -126,27 +131,28 @@ const styles = {
 
   heading: {
     color: "white",
-    marginBottom: "30px",
+    marginBottom: "20px",
   },
 
   card: {
-    background: "#ffffff",
+    background: "#fff",
     padding: "30px",
     borderRadius: "16px",
     maxWidth: "650px",
     margin: "0 auto",
-    boxShadow: "0 6px 18px rgba(0,0,0,0.2)",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
   },
 
   question: {
-    color: "#333",
     marginBottom: "20px",
+    color: "#333",
+    lineHeight: "1.5",
   },
 
   options: {
     display: "flex",
     flexDirection: "column",
-    gap: "12px",
+    gap: "10px",
   },
 
   button: {
@@ -156,6 +162,7 @@ const styles = {
     cursor: "pointer",
     color: "white",
     fontSize: "16px",
+    transition: "all 0.2s ease",
   },
 
   resultBox: {
@@ -168,11 +175,12 @@ const styles = {
   explanation: {
     marginTop: "10px",
     color: "#333",
+    lineHeight: "1.5",
   },
 
   nextButton: {
     marginTop: "15px",
-    padding: "10px 16px",
+    padding: "10px 15px",
     background: "#0d6efd",
     color: "white",
     border: "none",
@@ -188,4 +196,4 @@ const styles = {
   },
 };
 
-export default TechnicalPractice;
+export default AptitudePractice;
