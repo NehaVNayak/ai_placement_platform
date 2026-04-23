@@ -23,6 +23,11 @@ import WeakTopicsCard from "./pages/WeakTopicsCard";
 import LandingPage from "./pages/Landingpage";   
 import MockInterview from "./pages/MockInterview";
 import ResultPage from "./pages/ResultPage";
+import Cirriculum from "./pages/Cirriculum";
+import LandingProject from "./pages/LandingProject";
+
+
+
 
 function TPODashboard() {
   return <h2>TPO Dashboard</h2>;
@@ -37,6 +42,7 @@ function App() {
     <Router>
       <Routes>
 
+        <Route path="/" element={<LandingProject />} />
         <Route path="/tpo-signup" element={<TPOSignup />} />
         <Route path="/student-signup" element={<StudentSignup />} />
         <Route path="/faculty-signup" element={<FacultySignup />} />
@@ -190,13 +196,44 @@ function App() {
       />
 
       {/* 🔥 LANDING PAGE (FIRST SCREEN) */}
-        <Route path="/mock-interview" element={<LandingPage />} />
+        <Route
+        path="/mock-interview"
+        element={
+          <ProtectedRoute allowedRole="STUDENT">
+            <LandingPage />
+          </ProtectedRoute>
+        }
+      />
 
         {/* 🔥 INTERVIEW PAGE */}
-        <Route path="/interview" element={<MockInterview />} />
+        <Route
+        path="/interview"
+        element={
+          <ProtectedRoute allowedRole="STUDENT">
+            <MockInterview />
+          </ProtectedRoute>
+        }
+      />
 
         {/* 🔥 RESULT PAGE */}
-        <Route path="/result" element={<ResultPage />} />
+         <Route
+        path="/result"
+        element={
+          <ProtectedRoute allowedRole="STUDENT">
+            <ResultPage />
+          </ProtectedRoute>
+        }
+      />
+
+       <Route
+        path="/curriculum"
+        element={
+          <ProtectedRoute allowedRole="STUDENT">
+            <Cirriculum />
+          </ProtectedRoute>
+        }
+      />
+
 
 
       </Routes>
