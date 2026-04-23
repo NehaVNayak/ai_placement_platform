@@ -560,7 +560,7 @@ const styles = `
 const cards = [
   { title: "Start Practice", emoji: "🚀", desc: "Jump into customized coding and aptitude modules.", path: "/practice", iconBg: "default" },
   { title: "Analyse Resume", emoji: "📄", desc: "Get AI-driven improvements for your profile.", path: "/resume", iconBg: "default" },
-  { title: "Practice Interview", emoji: "🎤", desc: "Real-time mock sessions with facial analysis.", path: "/interview", iconBg: "default" },
+  { title: "Practice Interview", emoji: "🎤", desc: "Real-time mock sessions with facial analysis.", path: "/mock-interview", iconBg: "default" },
   { title: "View Performance", emoji: "📊", desc: "Track your progress across all domains.", path: "/performance", iconBg: "default" },
   { title: "Weak Topics", emoji: "📉", desc: "Focus on areas needing extra attention.", path: "/weak-topics", iconBg: "red", accent: "weak" },
   { title: "Curriculum", emoji: "📚", desc: "Access your structured learning roadmap.", path: "/curriculum", iconBg: "default" },

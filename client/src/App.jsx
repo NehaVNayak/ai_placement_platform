@@ -20,6 +20,9 @@ import AptitudeTopics from "./pages/AptitudeTopics";
 import AptitudePractice from "./pages/AptitudePractice";
 import PerformanceDashboard from "./pages/PerformanceDashboard";
 import WeakTopicsCard from "./pages/WeakTopicsCard";
+import LandingPage from "./pages/Landingpage";   
+import MockInterview from "./pages/MockInterview";
+import ResultPage from "./pages/ResultPage";
 
 function TPODashboard() {
   return <h2>TPO Dashboard</h2>;
@@ -185,6 +188,16 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      {/* 🔥 LANDING PAGE (FIRST SCREEN) */}
+        <Route path="/mock-interview" element={<LandingPage />} />
+
+        {/* 🔥 INTERVIEW PAGE */}
+        <Route path="/interview" element={<MockInterview />} />
+
+        {/* 🔥 RESULT PAGE */}
+        <Route path="/result" element={<ResultPage />} />
+
 
       </Routes>
     </Router>
