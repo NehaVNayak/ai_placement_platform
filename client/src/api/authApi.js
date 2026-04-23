@@ -1,3 +1,4 @@
+import axios from "axios";
 const BASE_URL = "http://127.0.0.1:8000/api";
 
 export const tpoSignup = async (data) => {
@@ -34,4 +35,9 @@ export const loginUser = async (data) => {
   }
 
   return result;
+};
+
+export const getStudentProfile = async (studentId) => {
+  const res = await axios.get(`${BASE_URL}/student/${studentId}`);
+  return res.data;
 };

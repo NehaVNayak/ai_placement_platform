@@ -75,3 +75,15 @@ def login(user: LoginSchema):
         "student_id": str(existing_user["_id"]),   # ⭐ added
         "name": existing_user.get("full_name") or existing_user.get("profile", {}).get("full_name")  # ⭐ added
     }
+
+@router.get("/student/{student_id}")
+def get_student(student_id: str):
+
+    student = db["students"].find_one({"_id": ObjectId(student_id)})
+
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+
+    student["_id"] = str(student["_id"])
+
+    return student
