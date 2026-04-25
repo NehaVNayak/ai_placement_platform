@@ -25,6 +25,7 @@ import MockInterview from "./pages/MockInterview";
 import ResultPage from "./pages/ResultPage";
 import Cirriculum from "./pages/Cirriculum";
 import LandingProject from "./pages/LandingProject";
+import Register from "./pages/Register"
 
 
 
@@ -43,6 +44,7 @@ function App() {
       <Routes>
 
         <Route path="/" element={<LandingProject />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/tpo-signup" element={<TPOSignup />} />
         <Route path="/student-signup" element={<StudentSignup />} />
         <Route path="/faculty-signup" element={<FacultySignup />} />

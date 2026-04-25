@@ -133,3 +133,126 @@ def submit_answer(data: AnswerRequest):
         "correct": is_correct,
         "explanation": question["explanation"]
     }
+
+
+@router.get("/stats")
+def aptitude_stats(student_id: str, section: str):
+
+    attempts = list(
+        aptitude_attempts.find({
+            "student_id": student_id,
+            "section": section
+        })
+    )
+
+    total = len(attempts)
+
+    if total == 0:
+        return {
+            "solved": 0,
+            "accuracy": 0,
+            "weak_topic": "N/A"
+        }
+
+    correct = sum(1 for a in attempts if a["is_correct"])
+
+    accuracy = round((correct / total) * 100, 1)
+
+    topic_map = {}
+
+    for a in attempts:
+        topic = a["topic"]
+
+        if topic not in topic_map:
+            topic_map[topic] = {"c": 0, "t": 0}
+
+        topic_map[topic]["t"] += 1
+
+        if a["is_correct"]:
+            topic_map[topic]["c"] += 1
+
+    weak_topic = "N/A"
+    low = 999
+
+    for topic, val in topic_map.items():
+        acc = (val["c"] / val["t"]) * 100
+
+        if acc < low:
+            low = acc
+            weak_topic = topic
+
+    return {
+        "solved": total,
+        "accuracy": accuracy,
+        "weak_topic": weak_topic
+    }
+
+@router.get("/dashboard")
+def aptitude_dashboard(student_id: str):
+
+    total_questions = aptitude_questions.count_documents({})
+
+    logical_total = aptitude_questions.count_documents({
+        "section": "Logical"
+    })
+
+    quant_total = aptitude_questions.count_documents({
+        "section": "Quant"
+    })
+
+    verbal_total = aptitude_questions.count_documents({
+        "section": "Verbal"
+    })
+
+    attempts = list(
+        aptitude_attempts.find({
+            "student_id": student_id
+        })
+    )
+
+    solved = len(attempts)
+
+    correct = sum(
+        1 for a in attempts if a["is_correct"]
+    )
+
+    accuracy = round(
+        (correct / solved) * 100, 1
+    ) if solved else 0
+
+    # section wise accuracy
+    section_map = {}
+
+    for a in attempts:
+        sec = a["section"]
+
+        if sec not in section_map:
+            section_map[sec] = {"c": 0, "t": 0}
+
+        section_map[sec]["t"] += 1
+
+        if a["is_correct"]:
+            section_map[sec]["c"] += 1
+
+    weak = "N/A"
+    low = 999
+
+    for sec, val in section_map.items():
+        acc = (val["c"] / val["t"]) * 100
+
+        if acc < low:
+            low = acc
+            weak = sec
+
+    return {
+        "tracks": 3,
+        "total_questions": total_questions,
+
+        "logical_total": logical_total,
+        "quant_total": quant_total,
+        "verbal_total": verbal_total,
+
+        "solved": solved,
+        "accuracy": accuracy,
+        "weak_area": weak
+    }

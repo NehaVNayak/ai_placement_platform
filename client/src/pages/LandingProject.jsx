@@ -291,7 +291,7 @@ function LandingProject() {
 const styles = {
   page: {
     fontFamily: "'Segoe UI', system-ui, -apple-system, sans-serif",
-    background: "#ffffff",
+    background: "#f1fdf1",
     minHeight: "100vh",
     color: "#1a1a1a",
   },

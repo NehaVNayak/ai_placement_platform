@@ -100,3 +100,83 @@ def submit_programming_answer(request: AnswerRequest):
         "correct": is_correct,
         "explanation": question.get("explanation", "")
     }
+
+@router.get("/dashboard")
+def programming_dashboard(student_id: str):
+
+    attempts = list(
+        programming_attempts_collection.find({
+            "student_id": student_id
+        })
+    )
+
+    stats = {}
+
+    for a in attempts:
+        q = programming_questions_collection.find_one({
+            "_id": ObjectId(a["question_id"])
+        })
+
+        if not q:
+            continue
+
+        subject = q["subject"]
+
+        if subject not in stats:
+            stats[subject] = {
+                "correct": 0,
+                "total": 0
+            }
+
+        stats[subject]["total"] += 1
+
+        if a["is_correct"]:
+            stats[subject]["correct"] += 1
+
+    result = []
+
+    for sub, val in stats.items():
+        pct = round(
+            (val["correct"] / val["total"]) * 100, 1
+        ) if val["total"] else 0
+
+        result.append({
+            "name": sub,
+            "pct": pct
+        })
+
+    strongest = "No Data"
+    focus = "No Data"
+
+    if result:
+        strongest = max(result, key=lambda x: x["pct"])["name"]
+        focus = min(result, key=lambda x: x["pct"])["name"]
+
+    total_questions = programming_questions_collection.count_documents({})
+    solved = len(attempts)
+
+    recommendations = []
+
+    if focus != "No Data":
+        recommendations.append({
+            "type": "focus",
+            "title": f"Improve {focus} Fundamentals",
+            "sub": "Priority: High"
+        })
+
+    if strongest != "No Data":
+        recommendations.append({
+            "type": "strong",
+            "title": f"Advance in {strongest}",
+            "sub": "Ready to Unlock"
+        })
+
+    return {
+        "languages": 5,
+        "questions": total_questions,
+        "solved": solved,
+        "strongest": strongest,
+        "focus": focus,
+        "progress": result,
+        "recommendations": recommendations
+    }
