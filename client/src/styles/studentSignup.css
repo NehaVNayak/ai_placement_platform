@@ -1,0 +1,23 @@
+.signup-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f5132, #198754);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+}
+
+.signup-card {
+  background: white;
+  width: 800px;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.signup-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 25px;
+}
