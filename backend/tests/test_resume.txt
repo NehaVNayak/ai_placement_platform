@@ -1,0 +1,84 @@
+Projects   
+1. Towards Digital Hostel Administration  
+Smital Sanjay 
+Kaginkar  
+Email: kaginkarsmital@gmail.com   
+GitHub: https://github.com/Smital25   
+LinkedIn: https://www.linkedin.com/in/smital-k-a04919326  
+Mobile. No: +91 8073832612  
+Languages: English | Hindi | Marathi | Kannada  
+About Me  
+Final-year Computer Science student with hands-on 
+experience building full-stack applications using React, 
+Spring Boot, and Flask. Developed scalable systems 
+including a digital wallet and hostel management 
+platform with secure APIs and real-time features. 
+Seeking a Software Developer role to build high
+performance backend systems and user-centric 
+applications. 
+Education  
+B.E. Computer Science & Engineering – SDM College 
+of Engineering & Tech, Dharwad (2023–2026)  
+Diploma in CSE – KLE Society’s CB Kore Polytechnic,  
+Chikodi (2020–2023, CGPA: 9.35)  
+High School (CBSE) – St. Theresa Convent School,  
+Hidkal-Dam (2010–2020, 73.4%)  
+Experience  
+Full Stack Development Intern | Global Next  
+Consultant Pvt Ltd (2025)  
+• Developed responsive UIs using React.js, HTML, CSS, 
+and JavaScript. 
+• Built REST APIs using Node.js, Express, and MongoDB 
+for scalable backend services. 
+• Implemented a secure Digital Wallet system with 
+JWT authentication and transaction handling. 
+• GitHub: https://github.com/Smital25/digitalwallet 
+Intern – Website Design | SV Mind Logic (2023)  
+• Developed responsive web applications using HTML, 
+CSS, JavaScript, and PHP. 
+• Designed SQL-based backend systems for efficient 
+data management. 
+• Built an Online Medicine Shopping platform with 
+authentication, cart, and checkout features.  
+• GitHub:  https://github.com/Smital25/CBK
+Medicines-DP 
+• Developed a role-based web application for managing 
+hostel operations (students, wardens, admins). 
+• Implemented dashboards with real-time notifications for 
+requests, room allocation, and records. 
+• Tech: Flask, MongoDB, Bootstrap 
+• GitHub: https://github.com/Smital25/MinorprojectHMS 
+2. Movie Booking System  
+• Built a ticket booking platform with movie browsing, seat 
+selection, and real-time booking updates. 
+• Designed backend with Java and MySQL for efficient data 
+handling and seat allocation. 
+• Tech: Java, MySQL 
+• GitHub: https://github.com/Smital25/MovieTicketBooking 
+3. AI Agents for Academic Project Planning &  
+Management  
+• Developed AI agents for task planning, research analysis, 
+and team coordination using local LLM (Ollama). 
+• Enabled privacy-focused project documentation and 
+automated workflow management. 
+• Tech: Python, Streamlit, LLM, MongoDB 
+• GitHub: https://github.com/Smital25/AI-Agents  
+Skills  
+Languages: Java, Python  
+Frontend: React.js, HTML, CSS, Bootstrap   
+Backend: Spring Boot, Flask, Node.js   
+Databases: MongoDB, MySQL   
+Tools: Git, GitHub, Postman, VS Code   
+Concepts: Data Structures & Algorithms, DBMS, REST APIs, 
+JWT Authentication 
+Familiar: Agile Methodology, Jira 
+Soft Skills:  Communication and Collaboration, Time 
+Management, Adaptability, Conflict Resolution, Decision 
+Making.  
+Certificates  
+• ReactJS for Beginners – Simplilearn  
+• Software Design & Development – Infosys Springboard  
+• GenAI for Professionals – Udemy  
+Published Paper  
+“Towards Digital Hostel Administration” – Published in 
+IJSRED Journal (Vol. 8, Issue 3) | Paper 

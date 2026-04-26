@@ -138,12 +138,12 @@ export default function ResumeAnalyser() {
           form.append('jd', new Blob([jdText], { type: 'text/plain' }), 'jd.txt')
         }
         // ← points to YOUR FastAPI backend
-        response = await fetch('http://localhost:8000/evaluate', {
+          response = await fetch('http://localhost:8000/api/resume/evaluate', {
           method: 'POST',
           body: form
         })
       } else {
-        response = await fetch('http://localhost:8000/evaluate-text', {
+        response = await fetch('http://localhost:8000/api/resume/evaluate-text', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
