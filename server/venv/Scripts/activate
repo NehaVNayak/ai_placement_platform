@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="D:\ENGI\Notes8sem\ai-placement-platform\server\venv"
+VIRTUAL_ENV="E:\ai_placement_platform\server\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

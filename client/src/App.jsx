@@ -26,9 +26,9 @@ import ResultPage from "./pages/ResultPage";
 import Cirriculum from "./pages/Cirriculum";
 import LandingProject from "./pages/LandingProject";
 import Register from "./pages/Register"
-
-
-
+import ForgotPassword from "./pages/ForgotPassword";
+import VerifyOTP from "./pages/VerifyOTP";
+import ResetPassword from "./pages/ResetPassword";
 
 function TPODashboard() {
   return <h2>TPO Dashboard</h2>;
@@ -49,6 +49,9 @@ function App() {
         <Route path="/student-signup" element={<StudentSignup />} />
         <Route path="/faculty-signup" element={<FacultySignup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/verify-otp" element={<VerifyOTP />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route
           path="/dashboard"

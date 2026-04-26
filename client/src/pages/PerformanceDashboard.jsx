@@ -1,599 +1,432 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Radar,
-  CartesianGrid,
-  Area,
-  AreaChart,
-} from "recharts";
+import { useNavigate } from "react-router-dom";
 
-/* ---------------- Helpers ---------------- */
+/* ─────────────────────────────────────────
+   PlacementAI – Select Performance Type
+   Drop-in replacement for the original
+   PerformanceDashboard component.
+───────────────────────────────────────── */
 
-function CircularProgress({ value = 0, size = 90 }) {
-  const r = 36;
-  const circ = 2 * Math.PI * r;
-  const dash = (value / 100) * circ;
+export default function PerformanceDashboard() {
+  const navigate = useNavigate();
 
-  return (
-    <svg width={size} height={size} viewBox="0 0 88 88">
-      <circle
-        cx="44"
-        cy="44"
-        r={r}
-        fill="none"
-        stroke="#e8f5ee"
-        strokeWidth="8"
-      />
-
-      <circle
-        cx="44"
-        cy="44"
-        r={r}
-        fill="none"
-        stroke="#198754"
-        strokeWidth="8"
-        strokeDasharray={`${dash} ${circ}`}
-        strokeLinecap="round"
-        transform="rotate(-90 44 44)"
-      />
-
-      <text
-        x="44"
-        y="49"
-        textAnchor="middle"
-        fontSize="15"
-        fontWeight="700"
-        fill="#111"
-      >
-        {value}%
-      </text>
-    </svg>
-  );
-}
-
-function ScoreBar({ value }) {
-  return (
-    <div style={styles.barBg}>
-      <div
-        style={{
-          ...styles.barFill,
-          width: `${value}%`,
-          background: value >= 70 ? "#198754" : "#dc3545",
-        }}
-      />
-    </div>
-  );
-}
-
-/* ---------------- Main ---------------- */
-
-function PerformanceDashboard() {
-  const [data, setData] = useState(null);
-  const [range, setRange] = useState("6M");
-
-  const studentId = localStorage.getItem("studentId");
-
-  useEffect(() => {
-    loadPerformance();
-  }, []);
-
-  const loadPerformance = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:8000/api/score/student-score?student_id=${studentId}`
-      );
-
-      setData(res.data);
-    } catch (error) {
-      console.log(error);
+  const handleMockInterview = () => {
+    const latest = localStorage.getItem("latestMockResult");
+    if (!latest) {
+      alert("No interview found. Please take an interview first.");
+      return;
     }
+    navigate("/result", { state: JSON.parse(latest) });
   };
 
-  if (!data) {
-    return <p style={styles.loading}>Loading Performance...</p>;
-  }
-
-  const readiness =
-    data.overall >= 80
-      ? "Ready for Placements 🚀"
-      : data.overall >= 60
-      ? "Improving 📈"
-      : "Needs Practice 📚";
-
-  const scoreCards = [
-    {
-      key: "technical",
-      label: "TECHNICAL",
-      value: data.technical,
-    },
-    {
-      key: "programming",
-      label: "PROGRAMMING",
-      value: data.programming,
-    },
-    {
-      key: "coding",
-      label: "CODING",
-      value: data.coding,
-    },
-    {
-      key: "aptitude",
-      label: "APTITUDE",
-      value: data.aptitude,
-    },
-  ];
-
-  const barData = [
-    { name: "TECH", score: data.technical },
-    { name: "PROG", score: data.programming },
-    { name: "CODE", score: data.coding },
-    { name: "APT", score: data.aptitude },
-  ];
-
-  const radarData = [
-    { skill: "Technical", score: data.technical },
-    { skill: "Programming", score: data.programming },
-    { skill: "Coding", score: data.coding },
-    { skill: "Aptitude", score: data.aptitude },
-  ];
-
-  const trend6M = [
-    { month: "Jan", score: 30 },
-    { month: "Feb", score: 42 },
-    { month: "Mar", score: 52 },
-    { month: "Apr", score: 61 },
-    { month: "May", score: 72 },
-    { month: "Now", score: data.overall },
-  ];
-
-  const trend1M = [
-    { month: "W1", score: data.overall - 12 },
-    { month: "W2", score: data.overall - 8 },
-    { month: "W3", score: data.overall - 4 },
-    { month: "W4", score: data.overall },
-  ];
-
-  const lineData = range === "1M" ? trend1M : trend6M;
+  const handleCoding = () => {
+    alert("Coding dashboard coming soon 🚀");
+  };
 
   return (
     <div style={styles.page}>
-      {/* NAVBAR */}
-      <div style={styles.nav}>
-        <div style={styles.logoWrap}>
-          <div style={styles.dot}></div>
-          <span style={styles.logoText}>AI Placement Prep</span>
+      {/* ── NAV ── */}
+      <nav style={styles.nav}>
+        <div style={styles.brand}>
+          <div style={styles.brandDot}>
+            <svg viewBox="0 0 12 12" style={{ width: 13, height: 13, fill: "#fff" }}>
+              <path d="M6 1L11 5.5L6 10L1 5.5Z" />
+            </svg>
+          </div>
+          PlacementAI
         </div>
 
-        <span style={styles.navRight}>PERFORMANCE CENTER</span>
-      </div>
-
-      <div style={styles.wrapper}>
-        {/* HEADER */}
-        <div style={styles.header}>
-          <div>
-            <div style={styles.tag}>✦ AI GROWTH ANALYTICS</div>
-
-            <h1 style={styles.heading}>Performance Dashboard</h1>
-
-            <p style={styles.subtext}>
-              Real-time performance analytics across Technical, Programming,
-              Coding and Aptitude modules.
-            </p>
-          </div>
-
-          <div style={styles.overallCard}>
-            <CircularProgress value={data.overall} />
-
-            <div>
-              <h3 style={{ margin: 0 }}>{readiness}</h3>
-
-              <p style={styles.grayText}>
-                Top {data.percentile}% of candidates
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* SCORE GRID */}
-        <div style={styles.grid}>
-          {scoreCards.map((item) => (
-            <div key={item.key} style={styles.card}>
-              <div style={styles.cardTop}>
-                <span style={styles.smallLabel}>{item.label}</span>
-                <span style={styles.bigValue}>{item.value}%</span>
-              </div>
-
-              <ScoreBar value={item.value} />
-            </div>
+        <div style={styles.navLinks}>
+          {["Dashboard", "Preparation", "Analytics"].map((label) => (
+            <span
+              key={label}
+              style={{
+                ...styles.navLink,
+                ...(label === "Preparation" ? styles.navLinkActive : {}),
+              }}
+            >
+              {label}
+            </span>
           ))}
         </div>
 
-        {/* STRONG / WEAK */}
-        <div style={styles.dualGrid}>
-          <div style={styles.strongCard}>
-            <p style={styles.topMini}>STRONGEST AREA</p>
-            <h2>{data.strongest}</h2>
-            <h1 style={{ color: "#4ade80" }}>
-              {Math.max(
-                data.technical,
-                data.programming,
-                data.coding,
-                data.aptitude
-              )}
-              %
-            </h1>
-          </div>
-
-          <div style={styles.weakCard}>
-            <p style={styles.topMiniGray}>NEEDS FOCUS</p>
-            <h2>{data.weakest}</h2>
-            <h1 style={{ color: "#dc3545" }}>
-              {Math.min(
-                data.technical,
-                data.programming,
-                data.coding,
-                data.aptitude
-              )}
-              %
-            </h1>
-          </div>
+        <div style={styles.navRight}>
+          {/* Bell */}
+          <button style={styles.iconBtn} aria-label="Notifications">
+            <svg viewBox="0 0 24 24" style={styles.iconSvg}>
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+            </svg>
+          </button>
+          {/* Profile */}
+          <button style={styles.iconBtn} aria-label="Profile">
+            <svg viewBox="0 0 24 24" style={styles.iconSvg}>
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+            </svg>
+          </button>
         </div>
+      </nav>
 
-        {/* CHARTS */}
-        <div style={styles.chartGrid}>
-          {/* BAR */}
-          <div style={styles.chartCard}>
-            <h3>Category Comparison</h3>
+      {/* ── MAIN ── */}
+      <main style={styles.main}>
+        <h1 style={styles.heading}>Select Performance Type</h1>
+        <p style={styles.subheading}>
+          Choose the focus of your AI-powered assessment session to get tailored
+          feedback and industry-standard evaluations.
+        </p>
 
-            <ResponsiveContainer width="100%" height={260}>
-              <BarChart data={barData}>
-                <XAxis dataKey="name" />
-                <YAxis domain={[0, 100]} />
-                <Tooltip />
-                <Bar
-                  dataKey="score"
-                  fill="#198754"
-                  radius={[8, 8, 0, 0]}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-
-          {/* RADAR */}
-          <div style={styles.chartCard}>
-            <h3>Skill Balance</h3>
-
-            <ResponsiveContainer width="100%" height={260}>
-              <RadarChart data={radarData}>
-                <PolarGrid />
-                <PolarAngleAxis dataKey="skill" />
-                <PolarRadiusAxis domain={[0, 100]} />
-                <Radar
-                  dataKey="score"
-                  stroke="#198754"
-                  fill="#198754"
-                  fillOpacity={0.4}
-                />
-              </RadarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* LINE CHART */}
-        <div style={styles.chartWide}>
-          <div style={styles.flexBetween}>
-            <h3>Growth Trend</h3>
-
-            <div>
-              <button
-                style={styles.toggle(range === "1M")}
-                onClick={() => setRange("1M")}
-              >
-                1M
-              </button>
-
-              <button
-                style={styles.toggle(range === "6M")}
-                onClick={() => setRange("6M")}
-              >
-                6M
-              </button>
+        <div style={styles.cards}>
+          {/* ── MOCK INTERVIEW CARD ── */}
+          <Card onClick={handleMockInterview}>
+            <CardIcon>
+              <svg viewBox="0 0 24 24" style={styles.cardIconSvg}>
+                <path d="M12 2a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" />
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                <line x1="12" y1="19" x2="12" y2="22" />
+                <line x1="8" y1="22" x2="16" y2="22" />
+              </svg>
+            </CardIcon>
+            <h2 style={styles.cardTitle}>Mock Interview</h2>
+            <p style={styles.cardDesc}>
+              Real-time AI behavioral and technical interviews with facial
+              sentiment analysis and structural feedback.
+            </p>
+            <div style={styles.cardFooter}>
+              <div style={styles.avatars}>
+                <Avatar bg="#c8e6c2" color="#1a5c28">A</Avatar>
+                <Avatar bg="#b8d9e0" color="#0f5a6e" zIndex={1}>B</Avatar>
+                <Avatar bg="#1a5c28" color="#fff" zIndex={2} fontSize={9}>
+                  +12k
+                </Avatar>
+              </div>
+              <span style={styles.practicingLabel}>Practicing now</span>
             </div>
-          </div>
+          </Card>
 
-          <ResponsiveContainer width="100%" height={280}>
-            <AreaChart data={lineData}>
-              <defs>
-                <linearGradient
-                  id="colorUv"
-                  x1="0"
-                  y1="0"
-                  x2="0"
-                  y2="1"
-                >
-                  <stop
-                    offset="5%"
-                    stopColor="#198754"
-                    stopOpacity={0.3}
-                  />
-                  <stop
-                    offset="95%"
-                    stopColor="#198754"
-                    stopOpacity={0}
-                  />
-                </linearGradient>
-              </defs>
-
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis domain={[0, 100]} />
-              <Tooltip />
-
-              <Area
-                type="monotone"
-                dataKey="score"
-                stroke="#198754"
-                fillOpacity={1}
-                fill="url(#colorUv)"
-                strokeWidth={3}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
+          {/* ── CODING & APTITUDE CARD ── */}
+          <Card onClick={handleCoding}>
+            <CardIcon>
+              <svg viewBox="0 0 24 24" style={styles.cardIconSvg}>
+                <polyline points="16 18 22 12 16 6" />
+                <polyline points="8 6 2 12 8 18" />
+              </svg>
+            </CardIcon>
+            <h2 style={styles.cardTitle}>Coding & Aptitude</h2>
+            <p style={styles.cardDesc}>
+              Solve algorithm challenges and logic puzzles under time pressure
+              with AI-driven complexity optimization tips.
+            </p>
+            <div style={styles.tags}>
+              {["DSA", "SQL", "System Design"].map((tag) => (
+                <span key={tag} style={styles.tag}>{tag}</span>
+              ))}
+            </div>
+          </Card>
         </div>
 
-        {/* STATS */}
-        <div style={styles.statsRow}>
-          <div style={styles.statCard}>
-            <p style={styles.grayText}>Solved</p>
-            <h3>{data.solved} Problems</h3>
-          </div>
-
-          <div style={styles.statCard}>
-            <p style={styles.grayText}>Interviews</p>
-            <h3>{data.mock_interviews} Sessions</h3>
-          </div>
-
-          <div style={styles.statCard}>
-            <p style={styles.grayText}>Resume</p>
-            <h3>{data.resume_score} Score</h3>
-          </div>
+        {/* ── STATUS BAR ── */}
+        <div style={styles.statusBar}>
+          <span style={styles.dots}>
+            <Dot delay="0s" opacity={1} />
+            <Dot delay="0.2s" opacity={0.65} />
+            <Dot delay="0.4s" opacity={0.35} />
+          </span>
+          Curating your personalized dashboard based on market trends...
         </div>
-      </div>
+      </main>
+
+      <style>{css}</style>
     </div>
   );
 }
 
-/* ---------------- Styles ---------------- */
+/* ─────────── Sub-components ─────────── */
+
+function Card({ children, onClick }) {
+  return (
+    <div
+      className="pai-card"
+      onClick={onClick}
+      style={styles.card}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = "#2d7a3a";
+        e.currentTarget.style.transform = "translateY(-3px)";
+        e.currentTarget.style.boxShadow = "0 10px 32px rgba(26,92,40,0.12)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = "#d4e8d0";
+        e.currentTarget.style.transform = "translateY(0)";
+        e.currentTarget.style.boxShadow = "none";
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function CardIcon({ children }) {
+  return <div style={styles.cardIcon}>{children}</div>;
+}
+
+function Avatar({ children, bg, color, zIndex = 0, fontSize = 10 }) {
+  return (
+    <div
+      style={{
+        ...styles.avatar,
+        background: bg,
+        color,
+        zIndex,
+        fontSize,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function Dot({ delay, opacity }) {
+  return (
+    <span
+      style={{
+        ...styles.dot,
+        opacity,
+        animationDelay: delay,
+      }}
+      className="pai-dot"
+    />
+  );
+}
+
+/* ─────────── Styles ─────────── */
 
 const styles = {
   page: {
     minHeight: "100vh",
-    background: "#e9f7e9",
-    fontFamily: "Segoe UI",
+    background: "#edf5ec",
+    display: "flex",
+    flexDirection: "column",
+    fontFamily: "'DM Sans', system-ui, sans-serif",
   },
 
+  /* nav */
   nav: {
-    background: "#12311e",
-    padding: "16px 40px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-
-  logoWrap: {
     display: "flex",
     alignItems: "center",
-    gap: "10px",
-  },
-
-  dot: {
-    width: "10px",
-    height: "10px",
-    borderRadius: "50%",
-    background: "#4ade80",
-  },
-
-  logoText: {
-    color: "white",
-    fontWeight: "bold",
-  },
-
-  navRight: {
-    color: "#9ca3af",
-    fontSize: "13px",
-  },
-
-  wrapper: {
-    maxWidth: "1200px",
-    margin: "0 auto",
-    padding: "35px 25px",
-  },
-
-  header: {
-    display: "flex",
     justifyContent: "space-between",
-    gap: "20px",
-    flexWrap: "wrap",
-    marginBottom: "30px",
+    padding: "14px 28px",
+    background: "#fff",
+    borderBottom: "0.5px solid #d4e8d0",
   },
-
-  tag: {
-    background: "#e8f5ee",
-    color: "#198754",
-    display: "inline-block",
-    padding: "6px 14px",
-    borderRadius: "30px",
-    fontSize: "12px",
-    fontWeight: "bold",
-  },
-
-  heading: {
-    marginTop: "15px",
-    fontSize: "40px",
-    marginBottom: "10px",
-  },
-
-  subtext: {
-    color: "#666",
-    maxWidth: "500px",
-  },
-
-  overallCard: {
-    background: "white",
-    borderRadius: "18px",
-    padding: "20px",
+  brand: {
     display: "flex",
     alignItems: "center",
-    gap: "20px",
-    boxShadow: "0 10px 25px rgba(0,0,0,0.08)",
+    gap: 8,
+    fontWeight: 600,
+    fontSize: 15,
+    color: "#1a3d20",
   },
-
-  grayText: {
-    color: "#777",
-    margin: 0,
-  },
-
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
-    gap: "20px",
-    marginBottom: "25px",
-  },
-
-  card: {
-    background: "white",
-    padding: "20px",
-    borderRadius: "18px",
-    boxShadow: "0 10px 20px rgba(0,0,0,0.06)",
-  },
-
-  cardTop: {
+  brandDot: {
+    width: 26,
+    height: 26,
+    background: "#1a5c28",
+    borderRadius: 7,
     display: "flex",
-    justifyContent: "space-between",
+    alignItems: "center",
+    justifyContent: "center",
   },
-
-  smallLabel: {
-    color: "#888",
-    fontSize: "12px",
-    fontWeight: "bold",
-  },
-
-  bigValue: {
-    fontWeight: "bold",
-    fontSize: "22px",
-  },
-
-  barBg: {
-    height: "8px",
-    background: "#e8f5ee",
-    borderRadius: "10px",
-    marginTop: "12px",
-  },
-
-  barFill: {
-    height: "100%",
-    borderRadius: "10px",
-  },
-
-  dualGrid: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "20px",
-    marginBottom: "25px",
-  },
-
-  strongCard: {
-    background: "#12311e",
-    color: "white",
-    padding: "25px",
-    borderRadius: "18px",
-  },
-
-  weakCard: {
-    background: "white",
-    padding: "25px",
-    borderRadius: "18px",
-    boxShadow: "0 10px 20px rgba(0,0,0,0.06)",
-  },
-
-  topMini: {
-    color: "#86efac",
-    fontSize: "12px",
-    fontWeight: "bold",
-  },
-
-  topMiniGray: {
-    color: "#888",
-    fontSize: "12px",
-    fontWeight: "bold",
-  },
-
-  chartGrid: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "20px",
-    marginBottom: "25px",
-  },
-
-  chartCard: {
-    background: "white",
-    borderRadius: "18px",
-    padding: "20px",
-    boxShadow: "0 10px 20px rgba(0,0,0,0.06)",
-  },
-
-  chartWide: {
-    background: "white",
-    borderRadius: "18px",
-    padding: "20px",
-    boxShadow: "0 10px 20px rgba(0,0,0,0.06)",
-    marginBottom: "25px",
-  },
-
-  flexBetween: {
+  navLinks: {
     display: "flex",
-    justifyContent: "space-between",
+    gap: 28,
     alignItems: "center",
   },
-
-  toggle: (active) => ({
-    padding: "8px 14px",
-    border: "none",
-    borderRadius: "20px",
-    marginLeft: "8px",
+  navLink: {
+    fontSize: 14,
+    color: "#5a7a60",
     cursor: "pointer",
-    background: active ? "#12311e" : "#eee",
-    color: active ? "white" : "#333",
-  }),
-
-  statsRow: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
-    gap: "20px",
+    transition: "color .15s",
+  },
+  navLinkActive: {
+    color: "#1a5c28",
+    fontWeight: 500,
+  },
+  navRight: {
+    display: "flex",
+    gap: 10,
+    alignItems: "center",
+  },
+  iconBtn: {
+    width: 34,
+    height: 34,
+    borderRadius: "50%",
+    background: "#f0f7ee",
+    border: "0.5px solid #c5ddc0",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer",
+    padding: 0,
+  },
+  iconSvg: {
+    width: 16,
+    height: 16,
+    stroke: "#1a5c28",
+    fill: "none",
+    strokeWidth: 1.8,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
   },
 
-  statCard: {
-    background: "white",
-    padding: "20px",
-    borderRadius: "18px",
-    boxShadow: "0 10px 20px rgba(0,0,0,0.06)",
+  /* main */
+  main: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: "56px 24px 40px",
   },
-
-  loading: {
+  heading: {
+    fontSize: 32,
+    fontWeight: 600,
+    color: "#1a3d20",
     textAlign: "center",
-    marginTop: "120px",
-    fontSize: "24px",
+    margin: "0 0 12px",
+    letterSpacing: "-0.5px",
+  },
+  subheading: {
+    fontSize: 14,
+    color: "#5a7a60",
+    textAlign: "center",
+    lineHeight: 1.7,
+    maxWidth: 420,
+    margin: "0 0 48px",
+  },
+
+  /* cards */
+  cards: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: 20,
+    width: "100%",
+    maxWidth: 700,
+  },
+  card: {
+    background: "#fff",
+    borderRadius: 18,
+    border: "0.5px solid #d4e8d0",
+    padding: "28px 28px 24px",
+    cursor: "pointer",
+    transition: "border-color .2s, transform .18s, box-shadow .18s",
+  },
+  cardIcon: {
+    width: 50,
+    height: 50,
+    background: "#1a5c28",
+    borderRadius: 13,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
+  },
+  cardIconSvg: {
+    width: 22,
+    height: 22,
+    stroke: "#fff",
+    fill: "none",
+    strokeWidth: 2,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+  },
+  cardTitle: {
+    fontSize: 20,
+    fontWeight: 600,
+    color: "#1a3d20",
+    margin: "0 0 8px",
+  },
+  cardDesc: {
+    fontSize: 13,
+    color: "#5a7a60",
+    lineHeight: 1.65,
+    margin: "0 0 20px",
+  },
+  cardFooter: {
+    display: "flex",
+    alignItems: "center",
+    gap: 8,
+  },
+  avatars: {
+    display: "flex",
+  },
+  avatar: {
+    width: 27,
+    height: 27,
+    borderRadius: "50%",
+    border: "2px solid #fff",
+    marginRight: -8,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: 600,
+    letterSpacing: "-0.3px",
+    position: "relative",
+  },
+  practicingLabel: {
+    fontSize: 12,
+    color: "#5a7a60",
+    marginLeft: 14,
+  },
+  tags: {
+    display: "flex",
+    gap: 6,
+    flexWrap: "wrap",
+  },
+  tag: {
+    fontSize: 11,
+    fontWeight: 500,
+    padding: "4px 11px",
+    borderRadius: 20,
+    background: "#edf5ec",
+    color: "#2d7a3a",
+    border: "0.5px solid #b8d9b4",
+  },
+
+  /* status bar */
+  statusBar: {
+    marginTop: 44,
+    display: "flex",
+    alignItems: "center",
+    gap: 10,
+    background: "#fff",
+    border: "0.5px solid #d4e8d0",
+    borderRadius: 100,
+    padding: "10px 22px",
+    fontSize: 13,
+    color: "#5a7a60",
+  },
+  dots: {
+    display: "flex",
+    gap: 5,
+    alignItems: "center",
+  },
+  dot: {
+    display: "inline-block",
+    width: 7,
+    height: 7,
+    borderRadius: "50%",
+    background: "#1a5c28",
+    animation: "paiDotBlink 1.4s infinite ease-in-out",
   },
 };
 
-export default PerformanceDashboard;
+/* ─────────── Keyframes (injected via <style>) ─────────── */
+const css = `
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
+
+  @keyframes paiDotBlink {
+    0%, 80%, 100% { opacity: 1; }
+    40% { opacity: 0.2; }
+  }
+
+  .pai-card:active {
+    transform: scale(0.985) !important;
+  }
+`;

@@ -231,16 +231,22 @@ export default function ResultPage() {
   const navigate  = useNavigate();
   const [expandedQ, setExpandedQ] = useState(null);
 
-  if (!state || state.length === 0) {
-    return (
-      <div style={{ textAlign: "center", padding: "80px 20px", fontFamily: "'Segoe UI', system-ui, sans-serif" }}>
-        <h2 style={{ color: G.dk }}>No results found</h2>
-        <button onClick={() => navigate("/")} style={{ background: G.mid, color: "#fff", border: "none", borderRadius: 10, padding: "11px 22px", marginTop: 16, cursor: "pointer", fontFamily: "inherit", fontSize: 13, fontWeight: 700 }}>Back to Home</button>
-      </div>
-    );
-  }
+  // ✅ fallback to localStorage
+const stored = localStorage.getItem("latestMockResult");
 
-  const data = state;
+// decide data source
+const data = state || (stored ? JSON.parse(stored) : null);
+
+if (!data || data.length === 0) {
+  return (
+    <div style={{ textAlign: "center", padding: "80px 20px" }}>
+      <h2>No results found</h2>
+      <button onClick={() => navigate("/")}>Back to Home</button>
+    </div>
+  );
+}
+
+  // const data = state;
   const avg  = (key) => data.reduce((a, b) => a + (b?.evaluation?.[key] || 0), 0) / data.length;
   const overall  = avg("overall_score");
   const avgComm  = avg("communication");

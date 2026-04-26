@@ -172,10 +172,18 @@ export default function MockInterview() {
     }
   };
 
-  const submitInterview = () => {
-    if (Object.keys(results).length === 0) return alert("Please submit at least one answer before finishing.");
-    navigate("/result", { state: Object.values(results) });
-  };
+ const submitInterview = () => {
+  if (Object.keys(results).length === 0) {
+    return alert("Please submit at least one answer before finishing.");
+  }
+
+  const finalResults = Object.values(results);
+
+  // ✅ THIS LINE IS THE MOST IMPORTANT
+  localStorage.setItem("latestMockResult", JSON.stringify(finalResults));
+
+  navigate("/result", { state: finalResults });
+};
 
   // Navigate to specific question — cancel speech immediately
   const goToQuestion = (idx) => {

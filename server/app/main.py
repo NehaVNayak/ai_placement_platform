@@ -18,13 +18,12 @@ from app.routes.dashboard_routes import router as dashboard_router
 from app.routes.technical_insights import router as tech_router
 from app.routes.coding_dashboard import router as coding_routerrr
 from app.routes.interview_routes import router as interview_router
-
+from app.routes.password_routes import router as password_router
 
 
 app = FastAPI()
 
-origins = ["http://localhost:5173",
-"http://127.0.0.1:5173"]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -49,7 +48,7 @@ app.include_router(dashboard_router, prefix="/api/dashboard")
 app.include_router(tech_router,prefix="/api/analyticss")
 app.include_router(coding_routerrr,prefix="/api/analytics")
 app.include_router(interview_router, prefix="/api/interview")
-
+app.include_router(password_router, prefix="/api")
 
 @app.get("/")
 def root():

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+# from streamlit import user
 from app.config.database import db
 from app.schemas.user_schema import TPOSignup, LoginSchema
 from app.utils.security import hash_password, verify_password
@@ -8,6 +9,9 @@ from bson import ObjectId
 router = APIRouter()
 
 
+# -------------------------------
+# ✅ TPO SIGNUP
+# -------------------------------
 @router.post("/tpo/signup")
 def tpo_signup(user: TPOSignup):
 
@@ -34,37 +38,63 @@ def tpo_signup(user: TPOSignup):
 
     return {"message": "TPO registered successfully"}
 
+
+# -------------------------------
+# ✅ LOGIN (FIXED + ROBUST)
+# -------------------------------
 @router.post("/login")
 def login(user: LoginSchema):
 
-    existing_user = db["users"].find_one({"email": user.email})
+    user_doc = None
+    role = None
 
-    if not existing_user:
-        existing_user = db["students"].find_one({"email": user.email})
+    # 🔍 CHECK USERS
+    user_doc = db["users"].find_one({"email": user.email})
+    if user_doc:
+        role = "TPO"
 
-    if not existing_user:
-        existing_user = db["faculty"].find_one({"email": user.email})
+    # 🔍 CHECK STUDENTS
+    if not user_doc:
+        user_doc = db["students"].find_one({"email": user.email})
+        if user_doc:
+            role = "STUDENT"
 
-    if not existing_user:
+    # 🔍 CHECK FACULTY
+    if not user_doc:
+        user_doc = db["faculty"].find_one({"email": user.email})
+        if user_doc:
+            role = "FACULTY"
+
+    if not user_doc:
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
-    # TPO password verification
-    if existing_user.get("role") == "TPO":
-        if not verify_password(user.password, existing_user["password"]):
-            raise HTTPException(status_code=400, detail="Invalid credentials")
+    stored_password = user_doc.get("password")
 
-    # Student / Faculty password check
-    else:
-        if user.password != existing_user["password"]:
-            raise HTTPException(status_code=400, detail="Invalid credentials")
+    print("LOGIN EMAIL:", user.email)
+    print("STORED HASH:", stored_password)
 
-    role = existing_user.get("role", "STUDENT")
+    try:
+        if stored_password and stored_password.startswith("$2"):
+            # hashed password
+            is_match = verify_password(user.password, stored_password)
+            print("PASSWORD MATCH:", is_match)
 
-    if "department" in existing_user:
-        role = "FACULTY"
+            if not is_match:
+                raise HTTPException(status_code=400, detail="Invalid credentials")
 
+        else:
+            # plain password
+            print("PLAIN PASSWORD CHECK")
+            if user.password != stored_password:
+                raise HTTPException(status_code=400, detail="Invalid credentials")
+
+    except Exception as e:
+        print("ERROR:", str(e))
+        raise HTTPException(status_code=400, detail="Invalid credentials")
+
+    # 🎯 CREATE TOKEN
     token = create_access_token({
-        "email": existing_user["email"],
+        "email": user_doc["email"],
         "role": role
     })
 
@@ -72,10 +102,14 @@ def login(user: LoginSchema):
         "access_token": token,
         "token_type": "bearer",
         "role": role,
-        "student_id": str(existing_user["_id"]),   # ⭐ added
-        "name": existing_user.get("full_name") or existing_user.get("profile", {}).get("full_name")  # ⭐ added
+        "student_id": str(user_doc["_id"]),
+        "name": user_doc.get("full_name") or user_doc.get("profile", {}).get("full_name")
     }
 
+
+# -------------------------------
+# ✅ GET STUDENT
+# -------------------------------
 @router.get("/student/{student_id}")
 def get_student(student_id: str):
 

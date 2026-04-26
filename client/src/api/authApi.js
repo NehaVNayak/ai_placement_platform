@@ -1,8 +1,9 @@
 import axios from "axios";
-const BASE_URL = "http://127.0.0.1:8000/api";
+const AUTH_URL = "http://localhost:8000/api";
+const API_URL = "http://localhost:8000/api";
 
 export const tpoSignup = async (data) => {
-  const response = await fetch(`${BASE_URL}/tpo/signup`, {
+  const response = await fetch(`${AUTH_URL}/tpo/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -20,7 +21,7 @@ export const tpoSignup = async (data) => {
 };
 
 export const loginUser = async (data) => {
-  const response = await fetch(`${BASE_URL}/login`, {
+  const response = await fetch(`${AUTH_URL}/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -38,6 +39,6 @@ export const loginUser = async (data) => {
 };
 
 export const getStudentProfile = async (studentId) => {
-  const res = await axios.get(`${BASE_URL}/student/${studentId}`);
+  const res = await axios.get(`${API_URL}/student/${studentId}`);
   return res.data;
 };
