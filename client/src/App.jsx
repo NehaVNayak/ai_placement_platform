@@ -26,7 +26,7 @@ import ResultPage from "./pages/ResultPage";
 import Cirriculum from "./pages/Cirriculum";
 import LandingProject from "./pages/LandingProject";
 import Register from "./pages/Register"
-
+import ResumeAnalyser from "./pages/ResumeAnalyser";
 
 
 
@@ -232,6 +232,14 @@ function App() {
         element={
           <ProtectedRoute allowedRole="STUDENT">
             <Cirriculum />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/resume"
+        element={
+          <ProtectedRoute allowedRole="STUDENT">
+            <ResumeAnalyser />
           </ProtectedRoute>
         }
       />
