@@ -1,6 +1,0 @@
-uvicorn app.main:app --reload
-
-
-api key website: https://aistudio.google.com/app/api-keys
-
-python -m app.services.seed_questions
