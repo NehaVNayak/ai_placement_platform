@@ -1,0 +1,47 @@
+# ── Web Framework ─────────────────────────────────────────────
+fastapi
+uvicorn[standard]
+
+# ── Database ──────────────────────────────────────────────────
+sqlalchemy
+alembic
+pymysql
+cryptography
+
+# ── Auth & Security ───────────────────────────────────────────
+python-jose[cryptography]
+passlib[bcrypt]
+bcrypt
+python-multipart
+
+# ── Pydantic ──────────────────────────────────────────────────
+pydantic
+pydantic[email]
+
+# ── Resume Analyser ───────────────────────────────────────────
+pdfplumber
+joblib
+nltk
+scikit-learn
+numpy
+scipy
+
+# ── Interview / Audio ─────────────────────────────────────────
+librosa
+soundfile
+audioread
+openai-whisper
+
+# ── AI / ML ───────────────────────────────────────────────────
+openai
+anthropic
+
+# ── HTTP ──────────────────────────────────────────────────────
+httpx
+requests
+
+# ── Static Files ──────────────────────────────────────────────
+aiofiles
+
+# ── Environment ───────────────────────────────────────────────
+python-dotenv
