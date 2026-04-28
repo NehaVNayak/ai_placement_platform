@@ -103,7 +103,8 @@ def login(user: LoginSchema):
         "token_type": "bearer",
         "role": role,
         "student_id": str(user_doc["_id"]),
-        "name": user_doc.get("full_name") or user_doc.get("profile", {}).get("full_name"),
+        #"name": user_doc.get("full_name") or user_doc.get("profile", {}).get("full_name"),
+        "name": user_doc.get("name") or user_doc.get("full_name") or user_doc.get("profile", {}).get("full_name"),
         "department": user_doc.get("department")   # ✅ FIXED
     }
 

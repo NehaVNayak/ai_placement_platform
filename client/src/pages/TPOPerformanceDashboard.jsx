@@ -17,6 +17,9 @@ function TPOPerformanceDashboard() {
   const [loading, setLoading] = useState(true);
   const [activeBranch, setActiveBranch] = useState("ALL");
 
+  const tpoName     = localStorage.getItem("full_name") || localStorage.getItem("name") || "TPO";
+  const tpoInitials = tpoName.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase();
+
   const BRANCH_LIST = ["CSE", "ECE", "MECH", "CIVIL", "ISE", "AIML"];
   const ALL_BRANCHES = ["ALL", ...BRANCH_LIST];
 
@@ -118,7 +121,6 @@ function TPOPerformanceDashboard() {
 
   if (loading) return <h2 style={{ padding: 30 }}>Loading...</h2>;
 
-  // ─── Branch-filtered data ───────────────────────────────────────────────────
   const isAll = activeBranch === "ALL";
 
   const branchStudents = isAll
@@ -126,7 +128,6 @@ function TPOPerformanceDashboard() {
     : students.filter(s => s.education?.[0]?.branch === activeBranch);
 
   const studentIds = new Set(branchStudents.map(s => String(s._id)));
-
   const branchAttempts = attempts.filter(a => studentIds.has(a.student_id));
 
   const totalStudents = branchStudents.length;
@@ -135,7 +136,6 @@ function TPOPerformanceDashboard() {
   const accuracy      = solved ? ((correct / solved) * 100).toFixed(1) : 0;
   const activeUsers   = new Set(branchAttempts.map(a => a.student_id)).size;
 
-  // ─── Enrollment chart data ──────────────────────────────────────────────────
   const enrollmentData = BRANCH_LIST.map(br => {
     const stu = students.filter(s => s.education?.[0]?.branch === br);
     const ids = new Set(stu.map(s => String(s._id)));
@@ -147,7 +147,6 @@ function TPOPerformanceDashboard() {
     };
   });
 
-  // ─── Subject performance ────────────────────────────────────────────────────
   const subjectMap = {};
   ALL_SUBJECTS.forEach(s => (subjectMap[s] = { correct: 0, total: 0 }));
 
@@ -155,7 +154,6 @@ function TPOPerformanceDashboard() {
     const q        = questionMap[a.question_id];
     const resolved = resolveSubject(a, q);
     if (!resolved) return;
-
     if (!subjectMap[resolved]) subjectMap[resolved] = { correct: 0, total: 0 };
     subjectMap[resolved].total++;
     if (a.is_correct) subjectMap[resolved].correct++;
@@ -174,7 +172,6 @@ function TPOPerformanceDashboard() {
   const attempted = subjects.filter(s => s.attempts > 0);
   const weakAreas = [...attempted].sort((a, b) => a.score - b.score).slice(0, 4);
 
-  // ─── Recent mock sessions ───────────────────────────────────────────────────
   const recentSessions = [...branchAttempts]
     .sort((a, b) => new Date(b.attempt_time) - new Date(a.attempt_time))
     .slice(0, 5)
@@ -189,8 +186,6 @@ function TPOPerformanceDashboard() {
       };
     });
 
-  // ─── Leaderboard ─────────────────────────────────────────────────────────────
-  // When ALL: use all students; each student shows their branch too
   const leaderboardSource = isAll ? students : branchStudents;
 
   const leaderboard = leaderboardSource.map(s => {
@@ -207,7 +202,6 @@ function TPOPerformanceDashboard() {
     };
   }).sort((a, b) => b.acc - a.acc);
 
-  // ─── Radar data ─────────────────────────────────────────────────────────────
   const radarData = [
     { subject: "Practice",   value: Number(accuracy) },
     { subject: "Accuracy",   value: Number(accuracy) },
@@ -216,7 +210,6 @@ function TPOPerformanceDashboard() {
     { subject: "Streak",     value: Math.max(Number(accuracy) - 10, 0) },
   ];
 
-  // ─── Render ─────────────────────────────────────────────────────────────────
   return (
     <div style={{ background: "#f0f5f1", minHeight: "100vh" }}>
 
@@ -264,13 +257,41 @@ function TPOPerformanceDashboard() {
         </div>
       </div>
 
+      {/* WELCOME BANNER */}
+      <div style={{
+        background: "#1a5c35",
+        color: "white",
+        padding: "18px 30px",
+        display: "flex",
+        alignItems: "center",
+        gap: 16,
+        borderBottom: "3px solid #12311e"
+      }}>
+        <div style={{
+          width: 52, height: 52, borderRadius: "50%",
+          background: "#a8d5b5",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 18, fontWeight: 700, color: "#12311e", flexShrink: 0
+        }}>
+          {tpoInitials}
+        </div>
+        <div>
+          <div style={{ fontSize: 19, fontWeight: 600, letterSpacing: 0.2 }}>
+            Welcome back, {tpoName}! 👋
+          </div>
+          <div style={{ fontSize: 13, color: "#a8d5b5", marginTop: 4 }}>
+            Here's a complete overview of student performance across all departments.
+          </div>
+        </div>
+      </div>
+
       <div style={{ padding: 25 }}>
 
         <h2 style={{ color: "#12311e", marginBottom: 20 }}>
           {isAll ? "All Departments" : `${activeBranch} Department`}
         </h2>
 
-        {/* ── STAT CARDS ── */}
+        {/* STAT CARDS */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 15 }}>
           <Card title="TOTAL STUDENTS"   value={totalStudents} />
           <Card title="ACTIVE USERS"     value={activeUsers} />
@@ -279,7 +300,7 @@ function TPOPerformanceDashboard() {
           <Card title="MOCK INTERVIEWS"  value={Math.floor(solved / 5)} />
         </div>
 
-        {/* ── CHARTS ── */}
+        {/* CHARTS */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 20, marginTop: 20 }}>
 
           <Box title="Branch-wise Enrollment">
@@ -318,7 +339,7 @@ function TPOPerformanceDashboard() {
 
         </div>
 
-        {/* ── SUBJECTS + WEAK AREAS ── */}
+        {/* SUBJECTS + WEAK AREAS */}
         <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 20, marginTop: 20 }}>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(6,1fr)", gap: 10 }}>
@@ -370,7 +391,7 @@ function TPOPerformanceDashboard() {
 
         </div>
 
-        {/* ── RECENT MOCK INTERVIEW SESSIONS ── */}
+        {/* RECENT MOCK INTERVIEW SESSIONS */}
         <div style={{
           background: "#fff", borderRadius: 12, padding: "1rem",
           marginTop: 20, border: "1.5px solid #1a5c35",
@@ -416,7 +437,7 @@ function TPOPerformanceDashboard() {
           )}
         </div>
 
-        {/* ── TOP STUDENTS / LEADERBOARD ── */}
+        {/* TOP STUDENTS / LEADERBOARD */}
         <div style={{
           background: "#fff", borderRadius: 12, padding: "1rem",
           marginTop: 20, border: "1.5px solid #1a5c35",

@@ -16,7 +16,9 @@ export default function FacultyDashboard() {
   const [questionMap, setQuestionMap] = useState({});
   const [loading, setLoading]         = useState(true);
 
-  const facultyBranch = localStorage.getItem("department") || "CSE";
+  const facultyBranch   = localStorage.getItem("department") || "CSE";
+  const facultyName     = localStorage.getItem("name") || localStorage.getItem("full_name") || "Faculty";
+  const facultyInitials = facultyName.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase();
 
   const ALL_SUBJECTS = [
     "DBMS","OS","CN","OOPS","SQL",
@@ -24,35 +26,22 @@ export default function FacultyDashboard() {
     "Aptitude","Verbal","Reasoning"
   ];
 
-  // Maps raw strings → display names (used for both question fields AND attempt section/topic)
   const SUBJECT_MAP = {
-    // DSA
     "dsa": "DSA", "data structures": "DSA", "algorithms": "DSA", "coding": "DSA",
-    // DBMS
     "dbms": "DBMS", "database": "DBMS", "databases": "DBMS",
-    // OS
     "os": "OS", "operating system": "OS", "operating systems": "OS",
-    // CN
     "cn": "CN", "computer networks": "CN", "networking": "CN", "network": "CN",
-    // OOPS
     "oops": "OOPS", "oop": "OOPS", "object oriented": "OOPS", "object-oriented": "OOPS",
-    // SQL
     "sql": "SQL",
-    // Languages
     "python": "Python",
     "java": "Java",
     "c++": "C++", "cpp": "C++",
-    // Aptitude sections
     "aptitude": "Aptitude", "quantitative": "Aptitude", "quant": "Aptitude",
     "verbal": "Verbal", "english": "Verbal",
     "reasoning": "Reasoning", "logical": "Reasoning", "logic": "Reasoning",
-    "series": "Reasoning",           // topic:"Series" under section:"Logical"
+    "series": "Reasoning",
   };
 
-  /**
-   * Resolve subject from BOTH the attempt record and the question record.
-   * Priority:  attempt.section → attempt.topic → question fields
-   */
   const resolveSubject = (attempt, question) => {
     const candidates = [
       attempt?.section,
@@ -62,14 +51,11 @@ export default function FacultyDashboard() {
       question?.topic,
       question?.section,
     ];
-
     for (const raw of candidates) {
       if (!raw) continue;
       const lower = raw.toLowerCase().trim();
-      // Direct match against display names
       const direct = ALL_SUBJECTS.find(s => s.toLowerCase() === lower);
       if (direct) return direct;
-      // Map lookup
       const mapped = SUBJECT_MAP[lower];
       if (mapped) return mapped;
     }
@@ -84,8 +70,8 @@ export default function FacultyDashboard() {
 
         const [s, a, aptA, tq, aq, pq, cq] = await Promise.all([
           fetch(`${API}/api/faculty/students`).then(r => r.json()),
-          fetch(`${API}/api/faculty/attempts`).then(r => r.json()),           // student_attempts
-          safeFetch(`${API}/api/faculty/aptitude-attempts`),                   // aptitude_attempts
+          fetch(`${API}/api/faculty/attempts`).then(r => r.json()),
+          safeFetch(`${API}/api/faculty/aptitude-attempts`),
           safeFetch(`${API}/api/faculty/questions/technical`),
           safeFetch(`${API}/api/faculty/questions/aptitude`),
           safeFetch(`${API}/api/faculty/questions/programming`),
@@ -101,7 +87,6 @@ export default function FacultyDashboard() {
 
         setStudents(s);
 
-        // Normalise both attempt collections and tag their source
         const normStudentAttempts = (Array.isArray(a) ? a : []).map(x => ({
           ...x,
           _source:     "student",
@@ -139,12 +124,10 @@ export default function FacultyDashboard() {
 
   if (loading) return <h2 style={{ padding: 30 }}>Loading...</h2>;
 
-  // ── BRANCH FILTER ──────────────────────────────────────────────────────────
   const branchStudents  = students.filter(s => s.education?.[0]?.branch === facultyBranch);
   const studentIds      = new Set(branchStudents.map(s => s._id));
   const branchAttempts  = attempts.filter(a => studentIds.has(a.student_id));
 
-  // ── STATS ──────────────────────────────────────────────────────────────────
   const totalStudents = branchStudents.length;
   const solved        = branchAttempts.length;
   const correct       = branchAttempts.filter(a => a.is_correct).length;
@@ -153,18 +136,16 @@ export default function FacultyDashboard() {
 
   const enrollmentData = [{ branch: facultyBranch, total: totalStudents, active: activeUsers }];
 
-  // ── SUBJECT ACCURACY ───────────────────────────────────────────────────────
   const subjectMap = {};
   ALL_SUBJECTS.forEach(s => (subjectMap[s] = { correct: 0, total: 0 }));
 
   branchAttempts.forEach(a => {
     const q        = questionMap[a.question_id];
-    const resolved = resolveSubject(a, q);          // ← pass BOTH attempt & question
+    const resolved = resolveSubject(a, q);
     if (!resolved) {
       console.warn("Unresolved subject for attempt:", a);
       return;
     }
-
     if (!subjectMap[resolved]) subjectMap[resolved] = { correct: 0, total: 0 };
     subjectMap[resolved].total++;
     if (a.is_correct) subjectMap[resolved].correct++;
@@ -179,10 +160,9 @@ export default function FacultyDashboard() {
     };
   });
 
-  const attempted  = subjects.filter(s => s.attempts > 0);
-  const weakAreas  = [...attempted].sort((a, b) => a.score - b.score).slice(0, 4);
+  const attempted = subjects.filter(s => s.attempts > 0);
+  const weakAreas = [...attempted].sort((a, b) => a.score - b.score).slice(0, 4);
 
-  // ── RECENT SESSIONS ────────────────────────────────────────────────────────
   const recentSessions = [...branchAttempts]
     .sort((a, b) => new Date(b.attempt_time) - new Date(a.attempt_time))
     .slice(0, 5)
@@ -197,7 +177,6 @@ export default function FacultyDashboard() {
       };
     });
 
-  // ── LEADERBOARD ────────────────────────────────────────────────────────────
   const leaderboard = branchStudents.map(s => {
     const sAtt         = branchAttempts.filter(a => a.student_id === s._id);
     const correctCount = sAtt.filter(a => a.is_correct).length;
@@ -205,7 +184,6 @@ export default function FacultyDashboard() {
     return { _id: s._id, name: s.full_name, branch: s.education?.[0]?.branch, solved: sAtt.length, acc };
   }).sort((a, b) => b.acc - a.acc);
 
-  // ── RADAR ──────────────────────────────────────────────────────────────────
   const radarData = [
     { subject: "Practice",   value: Number(accuracy) },
     { subject: "Accuracy",   value: Number(accuracy) },
@@ -225,6 +203,34 @@ export default function FacultyDashboard() {
       }}>
         <h3 style={{ margin: 0 }}>AI Placement Practice</h3>
         <span style={{ fontSize: 13, color: "#a8d5b5" }}>{facultyBranch} Faculty Dashboard</span>
+      </div>
+
+      {/* WELCOME BANNER */}
+      <div style={{
+        background: "#1a5c35",
+        color: "white",
+        padding: "18px 30px",
+        display: "flex",
+        alignItems: "center",
+        gap: 16,
+        borderBottom: "3px solid #12311e"
+      }}>
+        <div style={{
+          width: 52, height: 52, borderRadius: "50%",
+          background: "#a8d5b5",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 18, fontWeight: 700, color: "#12311e", flexShrink: 0
+        }}>
+          {facultyInitials}
+        </div>
+        <div>
+          <div style={{ fontSize: 19, fontWeight: 600, letterSpacing: 0.2 }}>
+            Welcome back, {facultyName}! 👋
+          </div>
+          <div style={{ fontSize: 13, color: "#a8d5b5", marginTop: 4 }}>
+            Here's how your {facultyBranch} students are performing today.
+          </div>
+        </div>
       </div>
 
       <div style={{ padding: 25 }}>
@@ -321,7 +327,8 @@ export default function FacultyDashboard() {
         {/* RECENT SESSIONS */}
         <div style={{
           background: "#fff", borderRadius: 12, padding: "1rem",
-          marginTop: 20, border: "1.5px solid #1a5c35", boxShadow: "0 2px 8px rgba(26,92,53,0.12)"
+          marginTop: 20, border: "1.5px solid #1a5c35",
+          boxShadow: "0 2px 8px rgba(26,92,53,0.12)"
         }}>
           <div style={{ fontSize: 11, fontWeight: 600, color: "#6b8577", marginBottom: 10, letterSpacing: ".08em" }}>
             RECENT MOCK INTERVIEW SESSIONS
@@ -364,7 +371,8 @@ export default function FacultyDashboard() {
         {/* TOP STUDENTS */}
         <div style={{
           background: "#fff", borderRadius: 12, padding: "1rem",
-          marginTop: 20, border: "1.5px solid #1a5c35", boxShadow: "0 2px 8px rgba(26,92,53,0.12)"
+          marginTop: 20, border: "1.5px solid #1a5c35",
+          boxShadow: "0 2px 8px rgba(26,92,53,0.12)"
         }}>
           <div style={{ fontSize: 11, fontWeight: 600, color: "#6b8577", marginBottom: 10, letterSpacing: ".08em" }}>
             TOP STUDENTS — {facultyBranch}
