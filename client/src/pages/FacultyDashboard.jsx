@@ -17,8 +17,13 @@ export default function FacultyDashboard() {
   const [loading, setLoading]         = useState(true);
 
   const facultyBranch   = localStorage.getItem("department") || "CSE";
-  const facultyName     = localStorage.getItem("name") || localStorage.getItem("full_name") || "Faculty";
-  const facultyInitials = facultyName.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase();
+  const facultyName = 
+  localStorage.getItem("name") ||
+  localStorage.getItem("full_name") ||
+  "Faculty";
+  const safeFacultyName = facultyName === "null" || !facultyName ? "Faculty" : facultyName;
+  
+  const facultyInitials = safeFacultyName.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase();
 
   const ALL_SUBJECTS = [
     "DBMS","OS","CN","OOPS","SQL",
