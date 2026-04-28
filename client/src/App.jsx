@@ -6,12 +6,15 @@ import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import FacultySignup from "./pages/FacultySignup";
 
+<<<<<<< HEAD
 import TPODashboard from "./pages/TPODashboard";
 import Chatbot from "./pages/chatbot";
 import FacultyDashboard from './pages/FacultyDashboard';
 import TPOPerformanceDashboard from "./pages/TPOPerformanceDashboard";
 import StudentPerformance from "./pages/StudentPerformance";
 
+=======
+>>>>>>> 1128f544807103466a5362f40fb7dd72549680f3
 import PracticeDashboard from "./pages/PracticeDashboard";
 import TechnicalSubjects from "./pages/TechnicalSubjects";
 import TechnicalPractice from "./pages/TechnicalPractice";
@@ -39,6 +42,7 @@ import ResetPassword from "./pages/ResetPassword";
 import ResumePage from "./pages/ResumePage";
 import Performance from "./pages/Performance"
 
+<<<<<<< HEAD
 /* ✅ NEW IMPORT */
 import FloatingChatbot from "./components/FloatingChatbot";
 
@@ -47,12 +51,19 @@ import TopNotification from "./components/TopNotification";
 import TPOViewNotifications from "./pages/TPOViewNotifications";
 
 /*function TPODashboard() {
+=======
+function TPODashboard() {
+>>>>>>> 1128f544807103466a5362f40fb7dd72549680f3
   return <h2>TPO Dashboard</h2>;
 }
 
 function FacultyDashboard() {
   return <h2>Faculty Dashboard</h2>;
+<<<<<<< HEAD
 }*/
+=======
+}
+>>>>>>> 1128f544807103466a5362f40fb7dd72549680f3
 
 function App() {
   return (
@@ -68,11 +79,14 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-otp" element={<VerifyOTP />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+<<<<<<< HEAD
         {/* OPTIONAL: keep or remove */}
         <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/faculty" element={<FacultyDashboard />} />
         <Route path="/student-performance/:id" element={<StudentPerformance />} /> 
         <Route path="/view-notifications" element={<TPOViewNotifications />} />
+=======
+>>>>>>> 1128f544807103466a5362f40fb7dd72549680f3
 
         <Route
           path="/dashboard"
@@ -84,6 +98,7 @@ function App() {
         />
 
         <Route
+<<<<<<< HEAD
              path="/tpo-notification"
              element={
                <ProtectedRoute allowedRole="TPO">
@@ -97,6 +112,12 @@ function App() {
           element={
             <ProtectedRoute allowedRole="TPO">
               <TPOPerformanceDashboard />
+=======
+          path="/tpo-dashboard"
+          element={
+            <ProtectedRoute allowedRole="TPO">
+              <TPODashboard />
+>>>>>>> 1128f544807103466a5362f40fb7dd72549680f3
             </ProtectedRoute>
           }
         />
@@ -290,10 +311,13 @@ function App() {
 
 
       </Routes>
+<<<<<<< HEAD
 
       {/* ✅ THIS IS THE MAIN ADDITION */}
       <FloatingChatbot />
 
+=======
+>>>>>>> 1128f544807103466a5362f40fb7dd72549680f3
     </Router>
   );
 }

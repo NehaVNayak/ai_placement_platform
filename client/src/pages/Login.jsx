@@ -18,6 +18,10 @@ const styles = `
     overflow: hidden;
   }
 
+<<<<<<< HEAD
+=======
+  /* Subtle dot grid pattern */
+>>>>>>> 1128f544807103466a5362f40fb7dd72549680f3
   .login-page::before {
     content: '';
     position: absolute;
@@ -39,6 +43,10 @@ const styles = `
     z-index: 1;
   }
 
+<<<<<<< HEAD
+=======
+  /* ── LEFT PANEL ── */
+>>>>>>> 1128f544807103466a5362f40fb7dd72549680f3
   .login-left {
     display: flex;
     flex-direction: column;
@@ -174,6 +182,10 @@ const styles = `
     color: #3a9a3a;
   }
 
+<<<<<<< HEAD
+=======
+  /* ── RIGHT PANEL (Card) ── */
+>>>>>>> 1128f544807103466a5362f40fb7dd72549680f3
   .login-card {
     background: rgba(255,255,255,0.9);
     border: 1px solid rgba(100,160,100,0.12);
@@ -395,6 +407,10 @@ const styles = `
 
   .signup-link:hover { text-decoration: underline; }
 
+<<<<<<< HEAD
+=======
+  /* ── FOOTER ── */
+>>>>>>> 1128f544807103466a5362f40fb7dd72549680f3
   .login-footer {
     position: fixed;
     bottom: 0;
@@ -415,6 +431,10 @@ const styles = `
 
   .login-footer a:hover { color: #3a7a3a; }
 
+<<<<<<< HEAD
+=======
+  /* ── RESPONSIVE ── */
+>>>>>>> 1128f544807103466a5362f40fb7dd72549680f3
   @media (max-width: 768px) {
     .login-inner {
       grid-template-columns: 1fr;
@@ -444,14 +464,18 @@ function Login() {
     try {
       const res = await loginUser(formData);
 
+<<<<<<< HEAD
       // ── Clear any previous session first ──
       localStorage.clear();
 
       // ── Common keys for all roles ──
+=======
+>>>>>>> 1128f544807103466a5362f40fb7dd72549680f3
       localStorage.setItem("token", res.access_token);
       localStorage.setItem("role", res.role);
       localStorage.setItem("email", formData.email);
 
+<<<<<<< HEAD
       // ── Role-specific keys + navigate ──
       if (res.role === "STUDENT") {
         localStorage.setItem("studentId", res.student_id);
@@ -470,11 +494,23 @@ function Login() {
         // TPO stored in users collection under profile.full_name
         localStorage.setItem("full_name", res.full_name || res.name);
         navigate("/tpo-dashboard");
+=======
+      if (res.role === "STUDENT") {
+        localStorage.setItem("studentId", res.student_id);
+        localStorage.setItem("name", res.name);
+>>>>>>> 1128f544807103466a5362f40fb7dd72549680f3
       }
 
       setIsError(false);
       setMessage("Login successful!");
 
+<<<<<<< HEAD
+=======
+      if (res.role === "STUDENT") navigate("/dashboard");
+      else if (res.role === "TPO") navigate("/tpo-dashboard");
+      else if (res.role === "FACULTY") navigate("/faculty-dashboard");
+
+>>>>>>> 1128f544807103466a5362f40fb7dd72549680f3
     } catch (error) {
       setIsError(true);
       setMessage(error.message);
@@ -490,7 +526,11 @@ function Login() {
       <div className="login-page">
         <div className="login-inner">
 
+<<<<<<< HEAD
           {/* LEFT: Marketing panel */}
+=======
+          {/* ── LEFT: Marketing panel ── */}
+>>>>>>> 1128f544807103466a5362f40fb7dd72549680f3
           <div className="login-left">
             <div className="product-badge">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -545,7 +585,11 @@ function Login() {
             </div>
           </div>
 
+<<<<<<< HEAD
           {/* RIGHT: Login card */}
+=======
+          {/* ── RIGHT: Login card ── */}
+>>>>>>> 1128f544807103466a5362f40fb7dd72549680f3
           <div className="login-card">
             <div className="card-brand">
               <div className="brand-dot" />
