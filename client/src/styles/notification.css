@@ -1,0 +1,47 @@
+/* 🔔 Bell icon */
+.bell-icon {
+  position: fixed;
+  top: 15px;
+  right: 70px; /* adjust if needed */
+  background: #0f7c45;
+  color: white;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 9999;
+}
+
+/* 🔴 Badge */
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  font-size: 10px;
+  padding: 3px 6px;
+  border-radius: 50%;
+}
+
+/* Dropdown */
+.notification-box {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  width: 300px;
+  max-height: 350px;
+  background: white;
+  border-radius: 10px;
+  padding: 12px;
+  overflow-y: auto;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  z-index: 9999;
+}
+
+/* Each item */
+.notification-item {
+  background: #f4f7f6;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 6px;
+}
