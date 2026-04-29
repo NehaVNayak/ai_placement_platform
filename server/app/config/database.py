@@ -15,4 +15,11 @@ programming_attempts_collection = db["programming_attempts"]
 coding_questions = db["coding_questions"]
 coding_submissions = db["coding_submissions"]
 aptitude_questions = db["aptitude_questions"]
+<<<<<<< HEAD
 aptitude_attempts = db["aptitude_attempts"]
+
+chat_collection = db["chat_history"]
+notifications_collection = db["notifications"]
+=======
+aptitude_attempts = db["aptitude_attempts"]
+>>>>>>> 1128f544807103466a5362f40fb7dd72549680f3

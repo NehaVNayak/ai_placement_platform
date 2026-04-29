@@ -2,7 +2,13 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 from app.config.database import faculty_collection
 
+<<<<<<< HEAD
+#router = APIRouter()
+
+router = APIRouter(prefix="/api/faculty", tags=["Faculty"]) #new added
+=======
 router = APIRouter()
+>>>>>>> 1128f544807103466a5362f40fb7dd72549680f3
 
 
 class FacultySignup(BaseModel):

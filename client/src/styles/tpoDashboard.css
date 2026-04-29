@@ -1,0 +1,118 @@
+/* MAIN BACKGROUND */
+.dashboard-container {
+  padding: 40px;
+  background: #f4f7f6;
+  min-height: 100vh;
+}
+
+/* CARD */
+.dashboard-card {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 16px;
+  max-width: 650px;
+  margin: auto;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  border-top: 5px solid #0f7c45;
+}
+
+/* TITLE */
+.dashboard-title {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #0f7c45;
+  font-weight: 600;
+}
+
+/* INPUT + TEXTAREA */
+.dashboard-form input,
+.dashboard-form textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+/* INPUT FOCUS */
+.dashboard-form input:focus,
+.dashboard-form textarea:focus {
+  border-color: #0f7c45;
+  outline: none;
+  box-shadow: 0 0 5px rgba(15, 124, 69, 0.2);
+}
+
+/* SEND BUTTON */
+.dashboard-form button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  background: #0f7c45;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* SEND BUTTON HOVER */
+.dashboard-form button:hover {
+  background: #0c5f34;
+  transform: translateY(-1px);
+}
+
+/* 🔥 VIEW NOTIFICATIONS BUTTON */
+.view-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  background: white;
+  color: #0f7c45;
+  border: 2px solid #0f7c45;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* VIEW BUTTON HOVER */
+.view-btn:hover {
+  background: #0f7c45;
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* PLACEHOLDER TEXT */
+.dashboard-form input::placeholder,
+.dashboard-form textarea::placeholder {
+  color: #888;
+  font-size: 13px;
+}
+
+/* CHECKBOX GROUP */
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin: 15px 0;
+}
+
+/* CHECKBOX ITEM */
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* CHECKBOX STYLE */
+.checkbox-group input[type="checkbox"] {
+  accent-color: #0f7c45;
+  transform: scale(1.1);
+}

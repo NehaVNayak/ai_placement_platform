@@ -1,0 +1,96 @@
+/* MAIN CHAT CONTAINER */
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-family: Arial;
+  background: #f4f7f6;
+}
+
+/* REMOVE SIDEBAR (not needed in popup) */
+.sidebar {
+  display: none;
+}
+
+/* CHAT AREA */
+.chat-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+/* HEADER */
+.chat-area h1 {
+  font-size: 16px;
+  color: #0f7c45;
+  margin-bottom: 8px;
+}
+
+/* CHAT BOX */
+.chat-box {
+  flex: 1;
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  overflow-y: auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* USER MESSAGE */
+.user-msg {
+  background: #0f7c45;
+  color: white;
+  padding: 8px 10px;
+  border-radius: 10px;
+  margin: 8px 0;
+  max-width: 75%;
+  margin-left: auto;
+  font-size: 13px;
+}
+
+/* BOT MESSAGE */
+.bot-msg {
+  background: #e9ecef;
+  padding: 8px 10px;
+  border-radius: 10px;
+  margin: 8px 0;
+  max-width: 75%;
+  font-size: 13px;
+}
+
+/* INPUT AREA */
+.input-area {
+  display: flex;
+  margin-top: 10px;
+}
+
+/* INPUT FIELD */
+.input-area input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 13px;
+}
+
+/* SEND BUTTON */
+.input-area button {
+  margin-left: 8px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  background: #0f7c45;
+  color: white;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+/* SCROLLBAR (OPTIONAL NICE LOOK) */
+.chat-box::-webkit-scrollbar {
+  width: 5px;
+}
+.chat-box::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 5px;
+}
