@@ -160,7 +160,9 @@ MONGO_URI=your_mongodb_connection
 ## 🤝 Contributors
 
 * Neha Nayak
-* Team Members (Add names)
+* Pooja S D
+* Smital Kaginkar
+* Ambika Chavan
 
 ---
 
