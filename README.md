@@ -1,65 +1,50 @@
-# 🚀 AI Powered Placement Preparation Platform
+# 🎯 AI Placement Preparation Platform
 
-An intelligent web-based platform designed to help students prepare for placements through aptitude tests, coding practice, interview preparation, resume analysis, and personalized learning recommendations powered by AI.
-
----
-
-## 📌 Overview
-
-The **AI Powered Placement Preparation Platform** is built to support students during campus placement preparation by offering a complete learning environment in one place. It helps users improve technical skills, aptitude performance, interview readiness, and overall confidence.
-
-The platform uses AI to analyze student performance, recommend topics, generate practice questions, and provide personalized guidance.
+An intelligent web-based platform designed to help students prepare for placements through **AI-driven mock interviews, coding practice, aptitude training, and performance analytics**.
 
 ---
 
-## ✨ Features
+## 🚀 Features
 
-### 🎯 Student Features
+### 👨‍🎓 Student Module
 
-* User Registration & Login
-* Personalized Dashboard
-* Aptitude Practice Tests
-* Coding Challenges
-* Technical MCQ Quizzes
-* HR Interview Questions
-* Resume Upload & Analysis
-* AI-Based Weakness Detection
-* Topic Recommendations
-* Progress Tracking
-* Performance Analytics
+* AI-powered mock interviews (HR + Technical)
+* Coding practice with real-time evaluation
+* MCQ-based aptitude tests
+* Personalized performance dashboard
+* Progress tracking & recommendations
 
-### 🤖 AI Features
+### 🧑‍🏫 Faculty Module
 
-* Smart Question Generation
-* Personalized Learning Path
-* Resume Feedback Suggestions
-* Mock Interview Assistance
-* Performance Prediction
+* Monitor student performance
+* Analyze subject-wise progress
+* Provide guidance & feedback
 
-### 🛠️ Admin Features
+### 🏢 TPO (Training & Placement Officer) Module
 
-* Manage Users
-* Add/Edit Questions
-* View Student Reports
-* Track Platform Usage
-* Manage Test Categories
+* Track overall placement readiness
+* View department-wise analytics
+* Manage notifications & announcements
+
+### 🤖 AI Integration
+
+* Dynamic question generation
+* Interview simulation using LLM APIs
+* Smart feedback system
 
 ---
 
-## 🧰 Tech Stack
+## 🛠️ Tech Stack
 
 ### Frontend
 
-* React.js
-* HTML5
-* CSS3
-* JavaScript
-* Bootstrap / Tailwind CSS
+* React.js (Vite)
+* CSS / Custom UI Components
 
 ### Backend
 
-* Node.js
-* Express.js
+* FastAPI (Python)
+* REST APIs
 
 ### Database
 
@@ -67,123 +52,126 @@ The platform uses AI to analyze student performance, recommend topics, generate 
 
 ### AI / ML
 
-* OpenAI API / Python ML Models
-
-### Tools
-
-* Git
-* GitHub
-* Postman
-* VS Code
+* Groq API (LLM-based responses)
+* Custom logic for question generation
 
 ---
 
 ## 📂 Project Structure
 
-```bash
-placement-platform/
-│── frontend/
-│── backend/
-│── database/
-│── models/
-│── routes/
-│── controllers/
-│── public/
-│── README.md
+```
+ai_placement_platform/
+│
+├── client/                # Frontend (React)
+│   ├── src/
+│   └── public/
+│
+├── server/                # Backend (FastAPI)
+│   ├── app/
+│   │   ├── routes/
+│   │   ├── models/
+│   │   ├── utils/
+│   │   └── services/
+│   └── main.py
+│
+├── .gitignore
+├── README.md
 ```
 
 ---
 
 ## ⚙️ Installation & Setup
 
-### 1️⃣ Clone Repository
+### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/placement-platform.git
-cd placement-platform
+git clone https://github.com/your-username/ai_placement_platform.git
+cd ai_placement_platform
 ```
 
-### 2️⃣ Install Dependencies
+---
+
+### 2️⃣ Backend Setup
 
 ```bash
+cd server
+python -m venv venv
+venv\Scripts\activate   # Windows
+pip install -r requirements.txt
+```
+
+Create `.env` file:
+
+```
+GROQ_API_KEY=your_api_key_here
+```
+
+Run backend:
+
+```bash
+uvicorn main:app --reload
+```
+
+---
+
+### 3️⃣ Frontend Setup
+
+```bash
+cd client
 npm install
-```
-
-### 3️⃣ Start Backend Server
-
-```bash
-npm run server
-```
-
-### 4️⃣ Start Frontend
-
-```bash
-npm start
+npm run dev
 ```
 
 ---
 
 ## 🔐 Environment Variables
 
-Create `.env` file:
+Create a `.env` file inside `server/`:
 
-```env
-PORT=5000
-MONGO_URI=your_mongodb_connection
-OPENAI_API_KEY=your_api_key
-JWT_SECRET=your_secret_key
 ```
+GROQ_API_KEY=your_api_key
+MONGO_URI=your_mongodb_connection
+```
+
+⚠️ Never commit `.env` to GitHub.
 
 ---
 
-## 📊 Modules Included
+## 📊 Key Functionalities
 
-* Aptitude Preparation
-* Reasoning Practice
-* Coding Round Preparation
-* Interview Preparation
-* Resume Builder
-* AI Recommendations
-* Mock Tests
-* Analytics Dashboard
+* AI Mock Interviews
+* Coding Problem Evaluation
+* Aptitude MCQ System
+* Role-based Dashboards (Student / Faculty / TPO)
+* Performance Analytics
 
 ---
 
 ## 🎯 Future Enhancements
 
-* Voice-Based Mock Interviews
-* Company Wise Preparation Sets
-* AI Chat Mentor
-* Leaderboard & Ranking
-* Mobile Application
-* Real-Time Coding Compiler
+* Resume analysis using AI
+* Video-based mock interviews
+* Company-specific preparation modules
+* Real-time coding contests
+* Deployment with Docker & CI/CD
 
 ---
 
-## 📸 Screenshots
+## 🤝 Contributors
 
-Add project screenshots here.
-
-```bash
-/screenshots/dashboard.png
-/screenshots/mocktest.png
-/screenshots/analytics.png
-```
+* Neha Nayak
+* Team Members (Add names)
 
 ---
 
-## 👨‍💻 Author
+## 📌 Note
 
-Developed by **Your Name**
-
----
-
-## 📜 License
-
-This project is licensed under the MIT License.
+This project is developed as part of a placement preparation system to enhance student readiness using AI technologies.
 
 ---
 
 ## ⭐ Support
 
-If you like this project, give it a ⭐ on GitHub.
+If you like this project, give it a ⭐ on GitHub!
+
+---
